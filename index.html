@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desktop Organizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+           
+        }
+        #container {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 300px;
+        }
+        input {
+            padding: 8px;
+            margin-bottom: 10px;
+            width: 280px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        p {
+            color: #d9534f; /* Set the error message color */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Desktop Organizer</h1>
+        <button class="folder-select" id="selectSrcFolder">Select Source Folder</button>
+        <input type="text" id="srcFolder" placeholder="Source Folder" readonly>
+        <button class="folder-select" id="selectDestFolder">Select Destination Folder</button>
+        <input type="text" id="destFolder" placeholder="Destination Folder" readonly>
+        <button id="organizeButton">Organize Files</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const selectSrcButton = document.getElementById('selectSrcFolder');
+        const selectDestButton = document.getElementById('selectDestFolder');
+        const srcFolderInput = document.getElementById('srcFolder');
+        const destFolderInput = document.getElementById('destFolder');
+        const organizeButton = document.getElementById('organizeButton');
+        const resultText = document.getElementById('result');
+
+        // Handle source folder selection
+        selectSrcButton.addEventListener('click', async () => {
+            const srcFolder = await window.electronAPI.selectFolder();
+            if (srcFolder) {
+                srcFolderInput.value = srcFolder;
+            }
+        });
+
+        // Handle destination folder selection
+        selectDestButton.addEventListener('click', async () => {
+            const destFolder = await window.electronAPI.selectFolder();
+            if (destFolder) {
+                destFolderInput.value = destFolder;
+            }
+        });
+
+        // Handle file organization
+        organizeButton.addEventListener('click', async () => {
+            const srcFolder = srcFolderInput.value;
+            const destFolder = destFolderInput.value;
+
+            // Check if both folders are selected
+            if (!srcFolder || !destFolder) {
+                resultText.textContent = "Please select both source and destination folders.";
+                return;
+            }
+
+            // Call the organizeFiles function and show result
+            const result = await window.electronAPI.organizeFiles(srcFolder, destFolder);
+            resultText.textContent = result.message;
+
+            // Optionally clear input fields after operation
+            srcFolderInput.value = '';
+            destFolderInput.value = '';
+        });
+    </script>
+</body>
+</html>

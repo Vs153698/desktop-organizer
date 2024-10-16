@@ -1,0 +1,47 @@
+{
+  "name": "desktop-organizer",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "nodemon": "^3.1.7"
+  },
+  "devDependencies": {
+    "electron-builder": "^25.1.7",
+    "electron": "^32.1.2"
+  },
+  "build": {
+    "compression":"maximum",
+    "appId": "com.vaibhav.desktoporganizer",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "**/*",
+      "file_organizer.py"
+
+    ],
+    "extraFiles": [
+      "file_organizer.py"  
+    ]
+  }
+}
